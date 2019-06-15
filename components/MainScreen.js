@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, AsyncStorage } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { Button } from 'react-native-elements'
 import { getStyles } from './AsyncManager'
 

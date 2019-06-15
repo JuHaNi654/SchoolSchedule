@@ -36,10 +36,24 @@ export default class SettingScreen extends Component {
             await getStyles().then(response => {
                 this.setState({ style: response })
             })
-
+            this._setValues()
         } catch (err) {
             console.log('Error: ', err)
         }
+    }
+
+    /**
+    |--------------------------------------------------
+    | Setting slider color position values from saved color rgb value
+    |--------------------------------------------------
+    */
+    _setValues = () => {
+        const values = [...this.state.style.backgroundColor.match(/\d+/g)]
+        this.setState({
+            redColor: parseInt(values[0]),
+            greenColor: parseInt(values[1]),
+            blueColor: parseInt(values[2])
+        })
     }
 
     /**
@@ -143,9 +157,11 @@ export default class SettingScreen extends Component {
                             style={{ width: 300, height: 40 }}
                             minimumValue={0}
                             maximumValue={240}
+                            value={this.state.redColor}
                             minimumTrackTintColor='rgb(255, 0, 0)'
                             maximumTrackTintColor="rgb(0, 0, 0)"
                             onValueChange={redColor => {
+                                console.log('slide onvaluechange functio called')
                                 this.setState({
                                     redColor: Math.round(redColor),
 
@@ -159,6 +175,7 @@ export default class SettingScreen extends Component {
                             style={{ width: 300, height: 40 }}
                             minimumValue={0}
                             maximumValue={240}
+                            value={this.state.greenColor}
                             minimumTrackTintColor='rgb(0, 255, 0)'
                             maximumTrackTintColor="rgb(0, 0, 0)"
                             onValueChange={greenColor => {
@@ -174,6 +191,7 @@ export default class SettingScreen extends Component {
                             style={{ width: 300, height: 40 }}
                             minimumValue={0}
                             maximumValue={240}
+                            value={this.state.blueColor}
                             minimumTrackTintColor='rgb(0, 0, 255)'
                             maximumTrackTintColor="rgb(0, 0, 0)"
                             onValueChange={blueColor => {
