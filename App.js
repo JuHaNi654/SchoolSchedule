@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { AsyncStorage } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import MainScreen from "./components/MainScreen";
 import NewTimestamp from "./components/NewTimestamp";

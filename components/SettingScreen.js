@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Dimensions, Text, AsyncStorage, Alert } from 'react-native'
+import { View, StyleSheet, Dimensions, Text, Alert } from 'react-native'
 import { Button, Header } from 'react-native-elements'
 import Slider from '@react-native-community/slider';
 import { getStyles } from './AsyncManager'
+import AsyncStorage from '@react-native-community/async-storage';
+import CustomRightHeaderComponent from './headerComponent/CustomRightHeaderComponent';
 
 export default class SettingScreen extends Component {
     static navigationOptions = { header: null }
@@ -29,32 +31,27 @@ export default class SettingScreen extends Component {
     |--------------------------------------------------
     | Function will get saved style object from asyncstorage
     | and then will set state
+    | Set slider color position values from saved color rgb value, by matching
+    | values with regex, that will get only numbers from it
     |--------------------------------------------------
     */
     _getStyles = async () => {
         try {
             await getStyles().then(response => {
-                this.setState({ style: response })
+                const values = [...response.backgroundColor.match(/\d+/g)]
+                this.setState({ 
+                    style: response,
+                    redColor: parseInt(values[0]),
+                    greenColor: parseInt(values[1]),
+                    blueColor: parseInt(values[2])
+                })
             })
-            this._setValues()
+            //this._setValues()
         } catch (err) {
             console.log('Error: ', err)
         }
     }
 
-    /**
-    |--------------------------------------------------
-    | Setting slider color position values from saved color rgb value
-    |--------------------------------------------------
-    */
-    _setValues = () => {
-        const values = [...this.state.style.backgroundColor.match(/\d+/g)]
-        this.setState({
-            redColor: parseInt(values[0]),
-            greenColor: parseInt(values[1]),
-            blueColor: parseInt(values[2])
-        })
-    }
 
     /**
     |--------------------------------------------------
@@ -143,6 +140,7 @@ export default class SettingScreen extends Component {
                             paddingBottom: 25
                         }
                     }}
+                    rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation} />}
                     containerStyle={[styles.headerStyle, this.state.style]}
                 />
                 <View style={{

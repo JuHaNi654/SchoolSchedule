@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import {
   View, Text, StyleSheet, TextInput,
-  Picker, Alert, AsyncStorage, Dimensions
+  Picker, Alert, Dimensions
 } from 'react-native'
 import { Button, Header } from 'react-native-elements'
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import { getStyles } from './AsyncManager'
+import AsyncStorage from '@react-native-community/async-storage';
+import CustomRightHeaderComponent from './headerComponent/CustomRightHeaderComponent';
 
 export default class NewTimestamp extends Component {
   static navigationOptions = { header: null }
@@ -203,6 +205,7 @@ export default class NewTimestamp extends Component {
               paddingBottom: 25
             }
           }}
+          rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation} />}
           containerStyle={[styles.headerStyle, style]}
         />
         <View style={{ flex: 1, marginTop: "10%" }}>

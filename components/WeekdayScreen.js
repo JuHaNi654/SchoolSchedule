@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, AsyncStorage, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Header } from "react-native-elements";
+import AsyncStorage from '@react-native-community/async-storage';
+import CustomRightHeaderComponent from './headerComponent/CustomRightHeaderComponent';
 
 export default class WeekdayScreen extends Component {
   static navigationOptions = { header: null }
@@ -42,9 +44,6 @@ export default class WeekdayScreen extends Component {
     }
   }
 
-
-
-
   /**
   |--------------------------------------------------
   | When weekday button pressed, it will pass course array object,
@@ -67,6 +66,7 @@ export default class WeekdayScreen extends Component {
               paddingBottom: 25
             }
           }}
+          rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation}/>}
           containerStyle={[styles.header, style]}
         />
         <View style={{ flex: 1, marginTop: "20%" }}>
@@ -132,7 +132,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "black",
     width: Dimensions.get("window").width,
-    height: "10%"
+    height: "10%",
+    justifyContent: 'space-around'
   },
   button: {
     backgroundColor: "black",

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Dimensions, AsyncStorage, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Dimensions, Alert } from 'react-native';
 import { Header } from 'react-native-elements';
 import { filter } from 'lodash'
 import { getStyles } from './AsyncManager'
+import AsyncStorage from '@react-native-community/async-storage';
+import CustomRightHeaderComponent from './headerComponent/CustomRightHeaderComponent';
 
 export default class CourseScreen extends Component {
     static navigationOptions = { header: null }
@@ -134,6 +136,7 @@ export default class CourseScreen extends Component {
             <View style={{ flex: 1 }}>
                 <Header
                     centerComponent={{ text: this.state.weekday, style: { fontSize: 25, fontWeight: 'bold', color: 'white', fontStyle: 'italic', paddingBottom: 25 } }}
+                    rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation}/>}
                     containerStyle={[styles.headerStyle, style]}
                 />
                 <View style={{ flex: 1 }}>
