@@ -69,7 +69,7 @@ export default class WeekdayScreen extends Component {
           rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation}/>}
           containerStyle={[styles.header, style]}
         />
-        <View style={{ flex: 1, marginTop: "20%" }}>
+        <View style={{ flex: 1, marginTop: "10%" }}>
           <Button
             buttonStyle={[styles.button, style]}
             onPress={() => navigate("Courses", {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "black",
-    width: Dimensions.get("window").width,
+    width: "100%",
     height: "10%",
     justifyContent: 'space-around'
   },

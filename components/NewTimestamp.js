@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {
   View, Text, StyleSheet, TextInput,
-  Picker, Alert, Dimensions
+  Picker, Alert, Dimensions, ScrollView
 } from 'react-native'
 import { Button, Header } from 'react-native-elements'
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -208,33 +208,27 @@ export default class NewTimestamp extends Component {
           rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation} />}
           containerStyle={[styles.headerStyle, style]}
         />
-        <View style={{ flex: 1, marginTop: "10%" }}>
-          <View style={styles.timeContainer}>
-            <View style={{ flexDirection: "row" }}>
+        <ScrollView 
+          style={{ flex: 1, marginTop: "5%", flexDirection: "column" }}
+          contentContainerStyle={{ alignItems: "stretch", justifyContent: "center"}}
+          >
+            <View style={styles.timeContainer}>
               <Text
-                style={{ padding: 5 }}
                 onPress={this.toggleStartTimePicker}
-                style={styles.timeText}
-              >
-                Start:{" "}
-                {this.state.startTime
-                  ? this.state.startTime
-                  : "--:--"}
-                <DateTimePicker
+                style={styles.timeText}>
+                Start:{" "}{this.state.startTime ? this.state.startTime : " --:-- "}
+                <DateTimePicker 
                   isVisible={this.state.startTimePicker}
                   onConfirm={this.handleStartingTime}
                   onCancel={this.toggleStartTimePicker}
                   mode="time"
                 />
               </Text>
-              <Text
-                style={{ padding: 5 }}
+              <Text 
                 onPress={this.toggleEndTimePicker}
-                style={styles.timeText}
-              >
-                End:{" "}
-                {this.state.endTime ? this.state.endTime : "--:--"}
-                <DateTimePicker
+                style={styles.timeText}>
+                End:{" "}{this.state.endTime ? this.state.endTime : " --:-- "}
+                <DateTimePicker 
                   isVisible={this.state.endTimePicker}
                   onConfirm={this.handleEndingTime}
                   onCancel={this.toggleEndTimePicker}
@@ -265,7 +259,7 @@ export default class NewTimestamp extends Component {
               value={this.state.classRoom}
             />
             <Picker
-              style={{ width: 200 }}
+              style={{ width: 200, marginLeft: "22.5%" }}
               selectedValue={this.state.weekday}
               onValueChange={(itemValue, itemIndex) =>
                 this.setState({ weekday: itemValue })
@@ -283,8 +277,7 @@ export default class NewTimestamp extends Component {
               title="Add new course"
               onPress={this.saveNewCourse}
             />
-          </View>
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -293,15 +286,15 @@ export default class NewTimestamp extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   headerStyle: {
-    backgroundColor: 'black',
-    width: Dimensions.get('window').width,
-    height: '10%',
+    backgroundColor: "black",
+    width: "100%",
+    height: "10%",
   },
 
   textStyle: {
@@ -309,19 +302,21 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     textAlign: "center",
     marginBottom: 10,
-    borderRadius: 12
+    borderRadius: 12,
+    marginLeft: "17.5%"
   },
 
   timeContainer: {
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center"
   },
   timeText: {
     fontSize: 17,
-    fontWeight: '500',
+    fontWeight: "500",
     margin: 10,
-    color: 'black'
+    color: "black",
+    padding: 5
   },
 
   button: {
@@ -330,5 +325,6 @@ const styles = StyleSheet.create({
     width: 320,
     borderRadius: 12,
     margin: 5,
+    marginLeft: '5%'
   }
 });

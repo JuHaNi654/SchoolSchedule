@@ -141,7 +141,7 @@ export default class CourseScreen extends Component {
                 />
                 <View style={{ flex: 1 }}>
                     <FlatList
-                        style={{ marginLeft: '7%' }}
+                        style={{ marginLeft: '10%' }}
                         data={this.state.selectedWeekdayCourses}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerStyle: {
-        width: Dimensions.get('window').width,
+        width: "100%",
         height: '10%',
     },
     courseContainer: {

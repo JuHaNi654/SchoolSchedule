@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Dimensions, Text, Alert } from 'react-native'
+import { View, StyleSheet, Dimensions, Text, Alert, ScrollView } from 'react-native'
 import { Button, Header } from 'react-native-elements'
 import Slider from '@react-native-community/slider';
 import { getStyles } from './AsyncManager'
@@ -39,7 +39,7 @@ export default class SettingScreen extends Component {
         try {
             await getStyles().then(response => {
                 const values = [...response.backgroundColor.match(/\d+/g)]
-                this.setState({ 
+                this.setState({
                     style: response,
                     redColor: parseInt(values[0]),
                     greenColor: parseInt(values[1]),
@@ -128,7 +128,8 @@ export default class SettingScreen extends Component {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container}
+                >
                 <Header
                     centerComponent={{
                         text: 'Settings',
@@ -143,12 +144,14 @@ export default class SettingScreen extends Component {
                     rightComponent={<CustomRightHeaderComponent navigation={this.props.navigation} />}
                     containerStyle={[styles.headerStyle, this.state.style]}
                 />
-                <View style={{
+                <ScrollView style={{
                     marginTop: "5%",
                     flex: 1,
-                    alignItems: 'stretch',
-                    justifyContent: 'center'
-                }}>
+                    }}
+                    contentContainerStyle={{
+                        alignItems: 'stretch',
+                        justifyContent: 'center'
+                    }}>
                     <View>
                         <Text style={styles.text}>Red color</Text>
                         <Slider
@@ -211,7 +214,7 @@ export default class SettingScreen extends Component {
                             onPress={this.resetScheduler}
                         />
                     </View>
-                </View>
+                </ScrollView>
             </View>
         )
     }
@@ -225,7 +228,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerStyle: {
-        width: Dimensions.get('window').width,
+        width: '100%',
         height: '10%',
     },
     text: {
