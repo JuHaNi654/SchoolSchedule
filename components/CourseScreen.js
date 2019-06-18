@@ -5,6 +5,7 @@ import { filter } from 'lodash'
 import { getStyles } from './AsyncManager'
 import AsyncStorage from '@react-native-community/async-storage';
 import CustomRightHeaderComponent from './headerComponent/CustomRightHeaderComponent';
+import moment from 'moment'
 
 export default class CourseScreen extends Component {
     static navigationOptions = { header: null }
@@ -62,7 +63,7 @@ export default class CourseScreen extends Component {
         const { navigation } = this.props
         let data = filter(navigation.getParam('courses'), { 'weekday': navigation.getParam('weekday') })
         data.sort(function (a, b) {
-            return new Date('1970/01/01 ' + a.startingTime) - new Date('1970/01/01 ' + b.startingTime)
+            return new Date(a.startingTime) - new Date(b.startingTime)
         })
         this.setState({
             weekday: navigation.getParam('weekday'),
@@ -149,7 +150,7 @@ export default class CourseScreen extends Component {
                                 delayPressIn={300}
                                 onPressIn={() => this.handlePressIn(item, index)}>
                                 <View style={[styles.courseContainer, infoContainerStyle]}>
-                                    <Text style={{ fontSize: 18, textAlign: 'center' }}>{item.startingTime} - {item.endingTime}</Text>
+                                    <Text style={{ fontSize: 18, textAlign: 'center' }}>{moment(item.startingTime).format("HH:mm")} - {moment(item.endingTime).format("HH:mm")}</Text>
                                     <Text style={{ fontSize: 18, textAlign: 'center' }}>{item.courseName}</Text>
                                     <Text style={{ fontSize: 15, textAlign: 'center' }}>{item.courseId}</Text>
                                     <Text style={{ fontSize: 15, textAlign: 'center' }}>{item.classRoom}</Text>

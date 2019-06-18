@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
+;import React, { Component } from 'react'
 import {
   View, Text, StyleSheet, TextInput,
   Picker, Alert, Dimensions, ScrollView
-} from 'react-native'
-import { Button, Header } from 'react-native-elements'
+} from 'react-native';
+import { Button, Header } from 'react-native-elements';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
-import { getStyles } from './AsyncManager'
+import { getStyles } from './AsyncManager';
 import AsyncStorage from '@react-native-community/async-storage';
 import CustomRightHeaderComponent from './headerComponent/CustomRightHeaderComponent';
+import { validate } from './validation/CourseValidation';
 
 export default class NewTimestamp extends Component {
   static navigationOptions = { header: null }
@@ -17,9 +18,9 @@ export default class NewTimestamp extends Component {
     this.state = {
       startTime: null,
       endTime: null,
-      courseName: '',
-      courseId: '',
-      classRoom: '',
+      courseName: null,
+      courseId: null,
+      classRoom: null,
       weekday: null,
       startTimePicker: false,
       endTimePicker: false,
@@ -60,46 +61,22 @@ export default class NewTimestamp extends Component {
   /**
   |--------------------------------------------------
   | Temporary course object validation.
-  | Throws message to the user if any of the courses field inputs
-  | are empty.
+  | Creates new @param newCourse object and will be checked with imported @function validate
+  | if there is any null values on object
   | If not then it will create course object and pass to the _storeData function
   |--------------------------------------------------
   */
-  saveNewCourse = () => {
-    if (this.state.weekday === null && this.state.endTime === null && this.state.startTime === null &&
-      this.state.courseName === '' && this.state.courseId === '' && this.state.classRoom === '') {
-      return
-    } else {
-      if (this.state.courseName === '') {
-        this.alertMessage('Warning!', 'Course name field is empty')
-        return
-      } else if (this.state.courseId === '') {
-        this.alertMessage('Warning!', 'Course id field is empty')
-        return
-      } else if (this.state.classRoom === '') {
-        this.alertMessage('Warning!', 'Classroom field is empty')
-        return
-      } else if (this.state.startTime === null) {
-        this.alertMessage('Warning!', 'Starting time field is empty')
-        return
-      } else if (this.state.endTime === null) {
-        this.alertMessage('Warning!', 'Ending time field is empty')
-        return
-      } else if (this.state.weekday === null) {
-        this.alertMessage('Warning!', 'Weekday is not selected')
-        return
-      } else {
-        const newCourse = {
-          startingTime: this.state.startTime,
-          endingTime: this.state.endTime,
-          courseName: this.state.courseName,
-          courseId: this.state.courseId,
-          classRoom: this.state.classRoom,
-          weekday: this.state.weekday
-        }
-        this._storeData(newCourse)
-      }
+  validateNewCourse = () => {
+    const newCourse = {
+      startingTime: this.state.startTime,
+      endingTime: this.state.endTime,
+      courseName: this.state.courseName,
+      courseId: this.state.courseId,
+      classRoom: this.state.classRoom,
+      weekday: this.state.weekday
     }
+
+    validate(newCourse, this._storeData, this.alertMessage)
   }
 
   /**
@@ -174,24 +151,35 @@ export default class NewTimestamp extends Component {
   |--------------------------------------------------
   | When user select time it will call handle functions
   | to set selected time state and closes time picker
+  | if starting time is after ending time it will throw alert error
+  | and if ending time is before starting time it will also throw alert error
   |--------------------------------------------------
   */
-  handleStartingTime = time => {
-    let startTime = moment(time).format("HH:mm")
-    this.setState({ startTime });
-    this.toggleStartTimePicker();
+  handleStartingTime = startTime => {
+    if (startTime < this.state.endTime || this.state.endTime === null) {
+      this.setState({ startTime });
+      this.toggleStartTimePicker();
+    } else {
+      this.alertMessage('Error!', 'Course starting time cannot be after ending time')
+    }
   }
 
-  handleEndingTime = time => {
-    let endTime = moment(time).format("HH:mm");
-    this.setState({ endTime })
-    this.toggleEndTimePicker();
+  handleEndingTime = endTime => {
+    if (this.state.startTime < endTime || this.state.startTime === null) {
+      this.setState({ endTime })
+      this.toggleEndTimePicker();
+    } else {
+      this.alertMessage('Error!', 'Course ending time cannot be before starting time')
+    }
   }
 
 
 
   render() {
     const { customTextInputStyle, style } = this.state
+    const startingTime = moment(this.state.startTime).format("HH:mm")
+    const endingTime = moment(this.state.endTime).format("HH:mm")
+
     return (
       <View style={styles.container}>
         <Header
@@ -216,7 +204,7 @@ export default class NewTimestamp extends Component {
               <Text
                 onPress={this.toggleStartTimePicker}
                 style={styles.timeText}>
-                Start:{" "}{this.state.startTime ? this.state.startTime : " --:-- "}
+                Start:{" "}{this.state.startTime ? startingTime : " --:-- "}
                 <DateTimePicker 
                   isVisible={this.state.startTimePicker}
                   onConfirm={this.handleStartingTime}
@@ -227,7 +215,7 @@ export default class NewTimestamp extends Component {
               <Text 
                 onPress={this.toggleEndTimePicker}
                 style={styles.timeText}>
-                End:{" "}{this.state.endTime ? this.state.endTime : " --:-- "}
+                End:{" "}{this.state.endTime ? endingTime : " --:-- "}
                 <DateTimePicker 
                   isVisible={this.state.endTimePicker}
                   onConfirm={this.handleEndingTime}
@@ -275,7 +263,7 @@ export default class NewTimestamp extends Component {
             <Button
               buttonStyle={[styles.button, style]}
               title="Add new course"
-              onPress={this.saveNewCourse}
+              onPress={this.validateNewCourse}
             />
         </ScrollView>
       </View>
